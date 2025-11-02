@@ -5,7 +5,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
-Comprehensive end-to-end test automation suite for the Shopping App mobile application. Built with WebDriverIO, Appium, and the Page Object Model design pattern to ensure reliable and maintainable test coverage.
+Comprehensive end-to-end test automation suite for the Shopping App mobile application. Built with WebDriverIO, Appium, and the Page Object Model design pattern.
 
 ## Table of Contents
 
