@@ -65,7 +65,7 @@ The Shopping App is designed as an assessment application to demonstrate QA auto
 | Assertions | 45+ |
 | Page Objects | 5 |
 | Helper Classes | 3 |
-| Estimated Runtime | 8-12 minutes |
+| Estimated Runtime | 5-8 minutes |
 
 ## Tech Stack
 
@@ -110,6 +110,13 @@ The Shopping App is designed as an assessment application to demonstrate QA auto
    appium driver install uiautomator2
    ```
 
+5. **Shopping App Repository**
+   ```bash
+   git clone https://github.com/RepRally/shop-interview.git
+   cd shop-interview
+   npm install
+   ```
+
 ### Environment Setup
 
 Add to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.):
@@ -141,8 +148,8 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/shopping-app-e2e-tests.git
-cd shopping-app-e2e-tests
+git clone https://github.com/nicolasBerceroTradeHelm/RepRallyTestMobileE2E.git
+cd RepRallyTestMobileE2E
 ```
 
 ### 2. Install Dependencies
@@ -220,6 +227,7 @@ Use the device ID in your configuration.
 ## Running Tests
 
 ### Prerequisites Before Running
+
 
 1. **Start the Shopping App**:
    ```bash
@@ -423,52 +431,6 @@ Page (Base Class)
     └── tapPlaceOrder()
 ```
 
-### Base Page Class
-
-**File:** `page.js`
-
-```javascript
-class Page {
-    async waitForDisplayed(element, timeout = 10000)
-    async tap(element)
-    async enterText(element, text)
-    async getText(element)
-    async isDisplayed(element)
-    async swipe(direction = 'up', distance = 0.6)
-    async takeScreenshot(filename)
-}
-```
-
-### Example: Product Detail Page
-
-**File:** `product-detail_page.js`
-
-```javascript
-class ProductDetailPage extends Page {
-    // Selectors
-    get addToCartButton() {
-        return $('android=new UiSelector().descriptionContains("Add")');
-    }
-    
-    // Actions
-    async addToCart() {
-        await this.swipe('up', 0.3);
-        await driver.pause(500);
-        await this.tap(this.addToCartButton);
-        await this.pause(1500);
-    }
-    
-    // Verifications
-    async verifyProductDetailsDisplayed() {
-        return {
-            hasName: await this.isDisplayed(this.productName),
-            hasWholesalePrice: await this.isDisplayed(this.wholesalePrice),
-            hasRetailPrice: await this.isDisplayed(this.retailPrice),
-        };
-    }
-}
-```
-
 ## Test Reports
 
 ### Console Output
@@ -512,9 +474,9 @@ Test: Navigate to product detail
 TC[Test-Case]-[Description]-[Timestamp].png
 
 Examples:
-TC1.1-product-grid-2024-11-02T01-23-45.png
-TC1.2-add-to-cart-tapped-2024-11-02T01-24-10.png
-TC3.3-order-success-2024-11-02T01-28-33.png
+TC1.1-product-grid-2025-11-02T01-23-45.png
+TC1.2-add-to-cart-tapped-2025-11-02T01-24-10.png
+TC3.3-order-success-2025-11-02T01-28-33.png
 ```
 
 ### Logs
@@ -526,252 +488,3 @@ Contains:
 - WebDriverIO execution logs
 - Error stack traces
 - Network requests (if enabled)
-
-## Troubleshooting
-
-### Common Issues & Solutions
-
-#### 1. "Cannot connect to Appium server"
-
-**Problem:** WebDriverIO can't reach Appium
-
-**Solution:**
-```bash
-# Check if Appium is running
-lsof -i :4723
-
-# If not running, start Appium
-appium
-
-# If port is blocked, kill the process
-lsof -ti:4723 | xargs kill -9
-appium
-```
-
-#### 2. "App not found" or "Activity not found"
-
-**Problem:** App package or activity incorrect
-
-**Solution:**
-```bash
-# Verify app is running
-adb shell dumpsys window | grep -E 'mCurrentFocus'
-
-# Get package and activity info
-adb shell "dumpsys window | grep mCurrentFocus"
-
-# Update wdio.android.conf.js with correct values
-```
-
-#### 3. "Element not found" errors
-
-**Problem:** Element selector is incorrect or element not visible
-
-**Solution:**
-- Increase timeout in `wdio.android.conf.js`
-- Use Appium Inspector to verify selectors
-- Check if element is off-screen (may need to scroll)
-- Wait for loading animations to complete
-
-```javascript
-// In page object
-await this.swipe('up', 0.5);  // Scroll to element
-await driver.pause(1000);      // Wait for animation
-await this.tap(element);       // Then interact
-```
-
-#### 4. "Session not created" error
-
-**Problem:** Device/emulator not found or incompatible
-
-**Solution:**
-```bash
-# List available devices
-adb devices
-
-# Restart ADB server
-adb kill-server
-adb start-server
-
-# Start emulator manually
-emulator -avd <emulator_name>
-```
-
-#### 5. Tests running slow
-
-**Problem:** Animations and waits slowing down tests
-
-**Solution:**
-- Disable animations in Developer Options:
-  - Window animation scale: OFF
-  - Transition animation scale: OFF
-  - Animator duration scale: OFF
-- Reduce `pause()` durations in page objects
-- Use faster emulator with hardware acceleration
-
-#### 6. "Shopping App not loaded"
-
-**Problem:** App needs to be running before tests start
-
-**Solution:**
-```bash
-# Start Shopping App first
-cd shopping-app
-npm start
-# Press 'a' for Android or scan QR with Expo Go
-
-# Wait for app to fully load
-# Then run tests
-cd ../e2e-tests
-npm test
-```
-
-### Debug Mode
-
-Run tests with verbose logging:
-
-```bash
-# Appium with debug logs
-appium --log-level debug
-
-# WebDriverIO with trace logging
-npm test -- --logLevel trace
-```
-
-### Manual Testing
-
-Test selectors manually using Appium Inspector:
-
-1. Start Appium Inspector
-2. Connect to session (localhost:4723)
-3. Inspect elements
-4. Test selectors before using in code
-
-## Best Practices
-
-### Writing Tests
-
-1. **Follow AAA Pattern**
-   ```javascript
-   it('should add product to cart', async () => {
-       // Arrange
-       await HomePage.tapProductByName('Premium Water');
-       await ProductDetailPage.waitForPageLoad();
-       
-       // Act
-       await ProductDetailPage.addToCart();
-       
-       // Assert
-       const alertDisplayed = await AlertHelper.isAddedToCartAlertDisplayed();
-       expect(alertDisplayed).toBe(true);
-   });
-   ```
-
-2. **Use Descriptive Test Names**
-   ```javascript
-   // Good
-   it('should display validation error when email is empty')
-   
-   // Bad
-   it('test email')
-   ```
-
-3. **Add Console Logs**
-   ```javascript
-   console.log('Test: Navigate to product detail');
-   console.log(`  Looking for product: "${productName}"`);
-   console.log('  Product detail page loaded');
-   ```
-
-4. **Capture Screenshots**
-   ```javascript
-   await ProductDetailPage.takeScreenshot('TC1.2-product-detail-page');
-   ```
-
-### Page Objects
-
-1. **Keep selectors in getters**
-   ```javascript
-   get addToCartButton() {
-       return $('android=new UiSelector().descriptionContains("Add")');
-   }
-   ```
-
-2. **One method = one action**
-   ```javascript
-   // Good
-   async addToCart() {
-       await this.tap(this.addToCartButton);
-   }
-   
-   // Bad
-   async addToCartAndVerify() {
-       await this.tap(this.addToCartButton);
-       await this.verifyAlert();
-   }
-   ```
-
-3. **Handle waits in page objects**
-   ```javascript
-   async addToCart() {
-       await this.swipe('up', 0.3);
-       await driver.pause(500);
-       await this.tap(this.addToCartButton);
-       await this.pause(1500);
-   }
-   ```
-
-### Maintenance
-
-1. **Update selectors** when UI changes
-2. **Reuse common actions** in base page
-3. **Keep test data** in `test-data.js`
-4. **Document complex logic** with comments
-
-## Contributing
-
-This is a demonstration project for QA automation skills. If you'd like to contribute:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/improve-tests`)
-3. Make your changes
-4. Add/update tests as needed
-5. Commit with descriptive messages
-6. Push and create a Pull Request
-
-### Contribution Ideas
-
-- Add iOS test support
-- Implement visual regression testing
-- Add performance metrics
-- Create parallel execution setup
-- Improve reporting with Allure
-- Add API testing layer
-
-## License
-
-This project is created for educational and demonstration purposes.
-
-## Authors
-
-- **Your Name** - *QA Automation Engineer* - [GitHub Profile](https://github.com/yourusername)
-
-## Acknowledgments
-
-- Shopping App development team
-- WebDriverIO community
-- Appium contributors
-
-## Support
-
-For questions or issues:
-- Create an issue in this repository
-- Check existing issues for solutions
-- Review WebDriverIO and Appium documentation
-
----
-
-**Test Coverage:** 13 test cases across 3 suites  
-**Automation Framework:** WebDriverIO + Appium  
-**Design Pattern:** Page Object Model  
-**Status:** Production Ready
