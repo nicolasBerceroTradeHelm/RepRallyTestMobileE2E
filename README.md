@@ -1,230 +1,777 @@
-# Beverage Shopping App - E2E Test Suite
+# Shopping App - E2E Test Automation Suite
 
-[![WebDriverIO](https://img.shields.io/badge/WebDriverIO-EA5906?style=for-the-badge&logo=webdriverio&logoColor=white)](https://webdriver.io/)
-[![Appium](https://img.shields.io/badge/Appium-25A162?style=for-the-badge&logo=appium&logoColor=white)](https://appium.io/)
-[![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com/)
-[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![WebDriverIO](https://img.shields.io/badge/WebDriverIO-v9.4-orange.svg)](https://webdriver.io/)
+[![Appium](https://img.shields.io/badge/Appium-v2.12-blue.svg)](https://appium.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
-A comprehensive end-to-end testing suite for the Beverage Shopping mobile application, built with **WebDriverIO** and **Appium** for Android testing automation.
+Comprehensive end-to-end test automation suite for the Shopping App mobile application. Built with WebDriverIO, Appium, and the Page Object Model design pattern to ensure reliable and maintainable test coverage.
 
 ## Table of Contents
 
-- [Project Description](#project-description)
-- [Architecture](#architecture)
-- [Features](#features)
+- [Overview](#overview)
+- [Test Coverage](#test-coverage)
+- [Tech Stack](#tech-stack)
 - [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Test Suites](#test-suites)
-- [Project Structure](#project-structure)
-- [Running Tests](#running-tests)
-- [Test Reports](#test-reports)
+- [Installation](#installation)
 - [Configuration](#configuration)
+- [Running Tests](#running-tests)
+- [Project Structure](#project-structure)
+- [Test Suites](#test-suites)
+- [Page Object Model](#page-object-model)
+- [Test Reports](#test-reports)
+- [Troubleshooting](#troubleshooting)
+- [Best Practices](#best-practices)
 - [Contributing](#contributing)
 
-## Project Description
+## Overview
 
-This test suite provides comprehensive automated testing for an e-commerce mobile application focusing on front-end and end-to-end flow of the user experience.
+This test automation suite provides comprehensive E2E testing for the Shopping App, a React Native mobile application built with Expo. The suite validates the complete user journey from product browsing through checkout completion.
 
-### What it Tests:
-- **Product Catalog Navigation** - Browse products, view details, check pricing
-- **Shopping Cart Management** - Add/remove items, quantity validation, price calculations
-- **Checkout Process** - Form validation, order summary, payment flow simulation
-- **User Interface Validation** - Element visibility, responsiveness, error handling
+### What We Test
 
-## Architecture
+- **Product Catalog** - Display, layout, and product information accuracy
+- **Product Details** - Pricing, specifications, and add-to-cart functionality
+- **Shopping Cart** - Item management, quantity updates, and price calculations
+- **Checkout Flow** - Form validation, order placement, and confirmation
 
-The test suite follows industry best practices with a **Page Object Model (POM)** architecture:
+### Purpose
+
+The Shopping App is designed as an assessment application to demonstrate QA automation skills. This test suite validates all critical user flows and business logic without requiring backend integration.
+
+## Test Coverage
+
+### Complete User Journey
 
 ```
-Test Architecture
-├── Page Objects      # Reusable page components
-├── Test Specs        # Test scenarios and assertions  
-├── Helpers          # Utility functions and data
-├── Configuration    # WebDriverIO and Appium setup
-└── Reports          # Test results and artifacts
+┌─────────────┐     ┌──────────────┐     ┌──────────┐     ┌──────────┐
+│   Product   │ --> │   Product    │ --> │ Shopping │ --> │ Checkout │
+│   Catalog   │     │   Details    │     │   Cart   │     │   Flow   │
+└─────────────┘     └──────────────┘     └──────────┘     └──────────┘
+      |                     |                   |                |
+  • View Grid         • View Info        • View Items    • Enter Info
+  • Verify Cards      • Add to Cart      • Update Qty    • Validate Form
+  • Tap Product       • Verify Alert     • Remove Item   • Place Order
+  • Multiple Items    • Min Quantity     • Clear Cart    • Confirmation
+                                         • Calculate Tax
 ```
 
-## Features
+### Test Statistics
 
-- Cross-platform Support - Android (iOS ready)
-- Page Object Model - Maintainable and scalable test code
-- Automatic Screenshots - Visual evidence for test results
-- Detailed Logging - Comprehensive test execution logs
-- Parallel Execution - Fast test runs
-- CI/CD Ready - Easily integrates with build pipelines
-- Real Device Testing - Works with emulators and physical devices
+| Metric | Count |
+|--------|-------|
+| Test Suites | 3 |
+| Test Cases | 13 |
+| Assertions | 45+ |
+| Page Objects | 5 |
+| Helper Classes | 3 |
+| Estimated Runtime | 8-12 minutes |
+
+## Tech Stack
+
+### Core Framework
+- **[WebDriverIO](https://webdriver.io/)** v9.4.1 - Test automation framework
+- **[Appium](https://appium.io/)** v2.12.1 - Mobile automation server
+- **[Appium UiAutomator2](https://github.com/appium/appium-uiautomator2-driver)** - Android driver
+- **[Mocha](https://mochajs.org/)** - BDD test framework
+
+### Design Patterns
+- **Page Object Model (POM)** - Maintainable, reusable page interactions
+- **Async/Await** - Modern asynchronous JavaScript patterns
+- **DRY Principles** - Shared utilities and base classes
+
+### Reporting & Utilities
+- **Spec Reporter** - Detailed console output with test results
+- **Screenshot Capture** - Automatic evidence collection
+- **Detailed Logging** - Step-by-step test execution logs
 
 ## Prerequisites
 
-### Software Requirements
-- **Node.js** v20+ ([Download](https://nodejs.org/))
-- **Android Studio** with Android SDK ([Download](https://developer.android.com/studio))
-- **Java JDK** 8+ (for Appium)
+### Required Software
 
-### Mobile Setup
-- **Android Emulator** running API level 16+
-- **Expo App** installed on emulator/device
-- **Beverage Shopping App** running via Expo ([Download](https://github.com/RepRally/shop-interview/tree/master))
+1. **Node.js** v18 or higher
+   ```bash
+   node --version  # Should be v18.0.0 or higher
+   ```
 
-### Quick Environment Check
+2. **Java JDK** 11 or higher
+   ```bash
+   java -version  # Should be 11 or higher
+   ```
+
+3. **Android Studio** with Android SDK
+   - Download from [developer.android.com](https://developer.android.com/studio)
+   - Install Android SDK Platform-Tools
+   - Set up `ANDROID_HOME` environment variable
+
+4. **Appium** v2.x
+   ```bash
+   npm install -g appium
+   appium driver install uiautomator2
+   ```
+
+### Environment Setup
+
+Add to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.):
+
 ```bash
-# Verify installations
-node --version          # Should be v20+
-java -version          # Should be 1.8+
-adb devices           # Should show connected device/emulator
+export ANDROID_HOME=$HOME/Library/Android/sdk  # macOS
+# export ANDROID_HOME=$HOME/Android/Sdk        # Linux
+# export ANDROID_HOME=%LOCALAPPDATA%\Android\Sdk  # Windows
+
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
 ```
 
-## Quick Start
+### Device Requirements
 
-### 1. Clone & Install
+**Option 1: Android Emulator** (Recommended for CI/CD)
+- Android 11 (API 30) or higher
+- Minimum 4GB RAM allocated
+- Hardware acceleration enabled
+
+**Option 2: Physical Android Device**
+- USB Debugging enabled
+- Developer options enabled
+- Connected via USB or Wi-Fi
+
+## Installation
+
+### 1. Clone the Repository
+
 ```bash
-git clone <repository-url>
-cd MobileTestingWebdriverIO/e2e-tests
+git clone https://github.com/yourusername/shopping-app-e2e-tests.git
+cd shopping-app-e2e-tests
+```
+
+### 2. Install Dependencies
+
+```bash
 npm install
 ```
 
-### 2. Start Mobile Environment
-```bash
-# Start Android Emulator (via Android Studio)
-# OR connect physical Android device
+This installs:
+- WebDriverIO and all required plugins
+- Appium service
+- Mocha framework
+- TypeScript support (optional)
 
-# Start Expo app with shopping app
-expo start
-# Press 'a' to open on Android
+### 3. Verify Appium Setup
+
+```bash
+# Check Appium installation
+appium --version
+
+# Verify UiAutomator2 driver
+appium driver list
+
+# Check connected devices
+adb devices
 ```
 
-### 3. Run Tests
+Expected output:
+```
+List of devices attached
+emulator-5554    device
+```
+
+## Configuration
+
+### Update Device Configuration
+
+Edit `wdio.android.conf.js`:
+
+```javascript
+capabilities: [{
+    platformName: 'Android',
+    'appium:deviceName': 'emulator-5554',  // Your device ID
+    'appium:automationName': 'UiAutomator2',
+    'appium:appPackage': 'host.exp.exponent',  // Expo Go package
+    'appium:appActivity': 'host.exp.exponent.experience.ExperienceActivity',
+    'appium:noReset': true,
+    'appium:fullReset': false,
+}]
+```
+
+### Key Configuration Options
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `deviceName` | Your emulator/device ID | `emulator-5554` |
+| `appPackage` | App package identifier | `host.exp.exponent` |
+| `appActivity` | Launch activity | `host.exp.exponent.experience.ExperienceActivity` |
+| `noReset` | Keep app state between tests | `true` |
+| `waitforTimeout` | Element wait timeout | `20000` ms |
+
+### Finding Your Device ID
+
 ```bash
-# Run all tests
+# List all connected devices
+adb devices
+
+# Example output:
+# emulator-5554    device
+# RFCT12345XYZ     device
+```
+
+Use the device ID in your configuration.
+
+## Running Tests
+
+### Prerequisites Before Running
+
+1. **Start the Shopping App**:
+   ```bash
+   cd shopping-app
+   npm start
+   # Then press 'a' for Android or scan QR with Expo Go
+   ```
+
+2. **Start Appium Server** (in a separate terminal):
+   ```bash
+   appium
+   ```
+
+3. **Verify app is running** on your device/emulator
+
+### Run All Tests
+
+```bash
 npm test
-
-# Or run specific test suite
-npm run test:product-browsing
-npm run test:cart-management
-npm run test:checkout 
 ```
 
-## Test Suites
+### Run Individual Test Suites
 
-### 1. Product Browsing & Cart Addition
-**File**: `01-product-browsing.test.js`
-- **TC 1.1**: View Product Catalog
-- **TC 1.2**: Add Single Product to Cart  
-- **TC 1.3**: Add Multiple Products to Cart
-- **TC 1.4**: Minimum Quantity Validation
+```bash
+# Product Browsing Tests (TC 1.1 - 1.4)
+npm run test:product-browsing
 
-### 2. Cart Management
-**File**: `02-cart-management.test.js`
-- **TC 2.1**: View Cart Contents
-- **TC 2.5**: Clear All Cart Items
-- **TC 2.6**: Cart Price Calculations
+# Cart Management Tests (TC 2.1, 2.5, 2.6)
+npm run test:cart-management
 
-### 3. Checkout Flow
-**File**: `03-checkout-flow.test.js`
-- **TC 3.1**: Navigate to Checkout
-- **TC 3.2**: Form Validation (Empty Fields)
-- **TC 3.3**: Complete Checkout with Valid Data
+# Checkout Flow Tests (TC 3.1 - 3.3)
+npm run test:checkout
+```
+
+### Run Specific Test File
+
+```bash
+npx wdio run wdio.android.conf.js --spec ./test/specs/android/01-product-browsing_test.js
+```
+
+### Advanced Options
+
+```bash
+# Run with specific device
+npm test -- --deviceName emulator-5556
+
+# Run with verbose logging
+npm test -- --logLevel debug
+
+# Run specific test case
+npx wdio run wdio.android.conf.js --spec ./test/specs/android/01-product-browsing_test.js --mochaOpts.grep "should add product to cart"
+```
 
 ## Project Structure
 
 ```
 e2e-tests/
 │
-├── package.json              # Dependencies and scripts
-├── wdio.android.conf.js      # WebDriverIO configuration
-├── README.md                 # This documentation
-│
-├── test/                     # Test code directory
-│   ├── specs/android/        # Test specifications
-│   │   ├── 01-product-browsing.test.js
-│   │   ├── 02-cart-management.test.js
-│   │   └── 03-checkout-flow.test.js
+├── test/
+│   ├── specs/
+│   │   └── android/
+│   │       ├── 01-product-browsing_test.js    # Product catalog & cart tests
+│   │       ├── 02-cart-management_test.js     # Cart operations tests
+│   │       └── 03-checkout-flow_test.js       # Checkout process tests
 │   │
-│   ├── pageobjects/          # Page Object Model
-│   │   ├── page.js              # Base page class
-│   │   ├── home.page.js         # Product catalog page
-│   │   ├── product-detail.page.js # Product details page
-│   │   ├── cart.page.js         # Shopping cart page
-│   │   └── checkout.page.js     # Checkout form page
-│   │
-│   └── helpers/              # Utility functions
-│       ├── image.helper.js      # Screenshot utilities
-│       ├── alert.helper.js      # Alert handling
-│       └── test-data.js         # Test data management
+│   └── pageobjects/
+│       ├── page.js                             # Base page with common methods
+│       ├── home_page.js                        # Product catalog page
+│       ├── product-detail_page.js              # Product detail page
+│       ├── cart_page.js                        # Shopping cart page
+│       └── checkout_page.js                    # Checkout page
 │
-├── screenshots/              # Test evidence
-├── logs/                     # Execution logs  
-└── reports/                  # Test reports
+├── helpers/
+│   ├── alert_helper.js                         # Alert/dialog handlers
+│   ├── image_helper.js                         # Image validation utilities
+│   └── test-data.js                            # Test data constants
+│
+├── screenshots/                                 # Auto-generated screenshots
+├── logs/                                        # Appium and test logs
+├── reports/                                     # Test execution reports
+│
+├── wdio.android.conf.js                        # WebDriverIO configuration
+├── package.json                                # Dependencies and scripts
+└── README.md                                   # This file
 ```
 
-## Running Tests
+### Key Directories
 
-### All Test Commands
-```bash
-# Run complete test suite
-npm test
-npm run test:all
+| Directory | Purpose | Auto-Generated |
+|-----------|---------|----------------|
+| `test/specs/` | Test specifications | No |
+| `test/pageobjects/` | Page object classes | No |
+| `helpers/` | Utility functions | No |
+| `screenshots/` | Test evidence | Yes |
+| `logs/` | Execution logs | Yes |
+| `reports/` | Test reports | Yes |
 
-# Individual test suites
-npm run test:product-browsing    # Product catalog tests
-npm run test:cart-management     # Shopping cart tests  
-npm run test:checkout           # Checkout process tests
+## Test Suites
 
-# Run specific test file
-npm test -- --spec ./test/specs/android/01-product-browsing.test.js
+### Suite 1: Product Browsing & Cart Addition
+
+**File:** `01-product-browsing_test.js`
+
+#### Test Case 1.1: View Product Catalog
+- Verify home page displays product grid
+- Verify product cards show image, name, price, brand
+- Verify multiple products are displayed
+
+#### Test Case 1.2: Add Single Product to Cart
+- Navigate to product detail page
+- Verify product details are displayed
+- Verify minimum quantity is enforced
+- Add product to cart
+- Verify success alert appears
+- Verify cart badge updates
+
+#### Test Case 1.3: Add Multiple Products to Cart
+- Add 3 different products to cart
+- Verify cart badge shows total quantity
+- Navigate to cart and verify all products present
+
+#### Test Case 1.4: Minimum Quantity Validation
+- Select product with minQuantity > 1
+- Verify quantity selector starts at minimum
+- Add to cart successfully with minimum quantity
+
+### Suite 2: Cart Management
+
+**File:** `02-cart-management_test.js`
+
+#### Test Case 2.1: View Cart Contents
+- Navigate to cart and display items
+- Verify cart items show correct information
+- Display subtotal, tax (8%), and total
+
+#### Test Case 2.5: Clear All Cart Items
+- Click "Clear all" button
+- Confirm clear action
+- Verify cart is empty
+- Verify empty state message is displayed
+
+#### Test Case 2.6: Cart Price Calculations
+- Add products with known prices
+- Verify subtotal, tax, and total calculations
+
+### Suite 3: Checkout Flow
+
+**File:** `03-checkout-flow_test.js`
+
+#### Test Case 3.1: Navigate to Checkout
+- Navigate from cart to checkout page
+- Verify checkout form fields are displayed
+- Verify order summary is displayed
+
+#### Test Case 3.2: Form Validation (Empty Fields)
+- Attempt to place order with empty fields
+- Verify validation for Store Name
+- Verify validation for Contact Name
+- Verify validation for Email
+- Verify validation for Phone Number
+
+#### Test Case 3.3: Complete Checkout with Valid Data
+- Fill all form fields with valid data
+- Place order successfully
+- Verify order success confirmation with order ID
+- Verify navigation back to home page
+
+## Page Object Model
+
+### Architecture
+
+```
+Page (Base Class)
+├── Common Methods
+│   ├── tap()
+│   ├── enterText()
+│   ├── swipe()
+│   ├── waitForDisplayed()
+│   └── takeScreenshot()
+│
+├── HomePage
+│   ├── tapProductByName()
+│   ├── getAllProductNames()
+│   └── goToCart()
+│
+├── ProductDetailPage
+│   ├── addToCart()
+│   ├── getProductDetails()
+│   └── verifyProductDetailsDisplayed()
+│
+├── CartPage
+│   ├── clearCart()
+│   ├── isCartEmpty()
+│   └── proceedToCheckout()
+│
+└── CheckoutPage
+    ├── fillStoreName()
+    ├── fillContactName()
+    ├── fillEmail()
+    ├── fillPhone()
+    └── tapPlaceOrder()
 ```
 
-### Debug Mode
-```bash
-# Run with detailed logs
-DEBUG=* npm test
+### Base Page Class
 
-# Run single test for debugging
-npm test -- --spec ./test/specs/android/01-product-browsing.test.js --grep "View Product Catalog"
+**File:** `page.js`
+
+```javascript
+class Page {
+    async waitForDisplayed(element, timeout = 10000)
+    async tap(element)
+    async enterText(element, text)
+    async getText(element)
+    async isDisplayed(element)
+    async swipe(direction = 'up', distance = 0.6)
+    async takeScreenshot(filename)
+}
+```
+
+### Example: Product Detail Page
+
+**File:** `product-detail_page.js`
+
+```javascript
+class ProductDetailPage extends Page {
+    // Selectors
+    get addToCartButton() {
+        return $('android=new UiSelector().descriptionContains("Add")');
+    }
+    
+    // Actions
+    async addToCart() {
+        await this.swipe('up', 0.3);
+        await driver.pause(500);
+        await this.tap(this.addToCartButton);
+        await this.pause(1500);
+    }
+    
+    // Verifications
+    async verifyProductDetailsDisplayed() {
+        return {
+            hasName: await this.isDisplayed(this.productName),
+            hasWholesalePrice: await this.isDisplayed(this.wholesalePrice),
+            hasRetailPrice: await this.isDisplayed(this.retailPrice),
+        };
+    }
+}
 ```
 
 ## Test Reports
 
-### Artifacts Generated
-- **Screenshots**: `./screenshots/` - Visual evidence of test execution
-- **Logs**: `./logs/wdio-appium.log` - Detailed execution logs
-- **Reports**: `./reports/` - Test result reports (if configured)
+### Console Output
 
-### Screenshot Naming Convention
+Tests produce detailed console output with:
+- Pass/fail status for each test
+- Screenshot references
+- Execution time
+- Step-by-step logs
+
+**Example Output:**
 ```
-TC{TestCase}-{Description}-{Timestamp}.png
+===========================================
+Starting E2E Tests
+App: Shopping App
+Platform: Android Emulator
+===========================================
+
+Starting Product Browsing & Cart Addition Tests...
+Preparing clean state...
+Ready to start tests
+
+Test: Home page displays product grid
+  Header with title "Shop" and cart button displayed
+  Product grid is displayed with 6 visible products
+  Screenshot saved: TC1.1-product-grid
+
+Test: Navigate to product detail
+  Looking for product: "Premium Energy Drink"
+  Tapped on product
+  Product detail page loaded
+  Screenshot saved: TC1.2-product-detail-page
+```
+
+### Screenshots
+
+**Location:** `./screenshots/`
+
+**Naming Convention:**
+```
+TC[Test-Case]-[Description]-[Timestamp].png
 
 Examples:
-TC1.1-product-catalog-2025-11-02T02-12-56-500Z.png
-TC3.2-form-validation-2025-11-02T02-17-30-799Z.png
+TC1.1-product-grid-2024-11-02T01-23-45.png
+TC1.2-add-to-cart-tapped-2024-11-02T01-24-10.png
+TC3.3-order-success-2024-11-02T01-28-33.png
 ```
 
-## Configuration
+### Logs
 
-### WebDriverIO Configuration (`wdio.android.conf.js`)
+**Location:** `./logs/`
 
-```javascript
-// Key configurations
-capabilities: [{
-    platformName: 'Android',
-    'appium:platformVersion': '16',        // Match your emulator
-    'appium:deviceName': 'Android Emulator',
-    'appium:appPackage': 'host.exp.exponent',
-    'appium:appActivity': 'host.exp.exponent.experience.ExperienceActivity'
-}]
-```
+Contains:
+- Appium server logs
+- WebDriverIO execution logs
+- Error stack traces
+- Network requests (if enabled)
 
-### Environment Variables
+## Troubleshooting
+
+### Common Issues & Solutions
+
+#### 1. "Cannot connect to Appium server"
+
+**Problem:** WebDriverIO can't reach Appium
+
+**Solution:**
 ```bash
-# Optional environment customization
-export APPIUM_HOST=localhost
-export APPIUM_PORT=4723
-export DEVICE_NAME="Pixel_6_API_33"
+# Check if Appium is running
+lsof -i :4723
+
+# If not running, start Appium
+appium
+
+# If port is blocked, kill the process
+lsof -ti:4723 | xargs kill -9
+appium
 ```
 
-### Customizing for Different Devices
-```javascript
-// Update wdio.android.conf.js for your specific device
-'appium:platformVersion': 'YOUR_ANDROID_VERSION',
-'appium:deviceName': 'YOUR_DEVICE_NAME',
+#### 2. "App not found" or "Activity not found"
+
+**Problem:** App package or activity incorrect
+
+**Solution:**
+```bash
+# Verify app is running
+adb shell dumpsys window | grep -E 'mCurrentFocus'
+
+# Get package and activity info
+adb shell "dumpsys window | grep mCurrentFocus"
+
+# Update wdio.android.conf.js with correct values
 ```
+
+#### 3. "Element not found" errors
+
+**Problem:** Element selector is incorrect or element not visible
+
+**Solution:**
+- Increase timeout in `wdio.android.conf.js`
+- Use Appium Inspector to verify selectors
+- Check if element is off-screen (may need to scroll)
+- Wait for loading animations to complete
+
+```javascript
+// In page object
+await this.swipe('up', 0.5);  // Scroll to element
+await driver.pause(1000);      // Wait for animation
+await this.tap(element);       // Then interact
+```
+
+#### 4. "Session not created" error
+
+**Problem:** Device/emulator not found or incompatible
+
+**Solution:**
+```bash
+# List available devices
+adb devices
+
+# Restart ADB server
+adb kill-server
+adb start-server
+
+# Start emulator manually
+emulator -avd <emulator_name>
+```
+
+#### 5. Tests running slow
+
+**Problem:** Animations and waits slowing down tests
+
+**Solution:**
+- Disable animations in Developer Options:
+  - Window animation scale: OFF
+  - Transition animation scale: OFF
+  - Animator duration scale: OFF
+- Reduce `pause()` durations in page objects
+- Use faster emulator with hardware acceleration
+
+#### 6. "Shopping App not loaded"
+
+**Problem:** App needs to be running before tests start
+
+**Solution:**
+```bash
+# Start Shopping App first
+cd shopping-app
+npm start
+# Press 'a' for Android or scan QR with Expo Go
+
+# Wait for app to fully load
+# Then run tests
+cd ../e2e-tests
+npm test
+```
+
+### Debug Mode
+
+Run tests with verbose logging:
+
+```bash
+# Appium with debug logs
+appium --log-level debug
+
+# WebDriverIO with trace logging
+npm test -- --logLevel trace
+```
+
+### Manual Testing
+
+Test selectors manually using Appium Inspector:
+
+1. Start Appium Inspector
+2. Connect to session (localhost:4723)
+3. Inspect elements
+4. Test selectors before using in code
+
+## Best Practices
+
+### Writing Tests
+
+1. **Follow AAA Pattern**
+   ```javascript
+   it('should add product to cart', async () => {
+       // Arrange
+       await HomePage.tapProductByName('Premium Water');
+       await ProductDetailPage.waitForPageLoad();
+       
+       // Act
+       await ProductDetailPage.addToCart();
+       
+       // Assert
+       const alertDisplayed = await AlertHelper.isAddedToCartAlertDisplayed();
+       expect(alertDisplayed).toBe(true);
+   });
+   ```
+
+2. **Use Descriptive Test Names**
+   ```javascript
+   // Good
+   it('should display validation error when email is empty')
+   
+   // Bad
+   it('test email')
+   ```
+
+3. **Add Console Logs**
+   ```javascript
+   console.log('Test: Navigate to product detail');
+   console.log(`  Looking for product: "${productName}"`);
+   console.log('  Product detail page loaded');
+   ```
+
+4. **Capture Screenshots**
+   ```javascript
+   await ProductDetailPage.takeScreenshot('TC1.2-product-detail-page');
+   ```
+
+### Page Objects
+
+1. **Keep selectors in getters**
+   ```javascript
+   get addToCartButton() {
+       return $('android=new UiSelector().descriptionContains("Add")');
+   }
+   ```
+
+2. **One method = one action**
+   ```javascript
+   // Good
+   async addToCart() {
+       await this.tap(this.addToCartButton);
+   }
+   
+   // Bad
+   async addToCartAndVerify() {
+       await this.tap(this.addToCartButton);
+       await this.verifyAlert();
+   }
+   ```
+
+3. **Handle waits in page objects**
+   ```javascript
+   async addToCart() {
+       await this.swipe('up', 0.3);
+       await driver.pause(500);
+       await this.tap(this.addToCartButton);
+       await this.pause(1500);
+   }
+   ```
+
+### Maintenance
+
+1. **Update selectors** when UI changes
+2. **Reuse common actions** in base page
+3. **Keep test data** in `test-data.js`
+4. **Document complex logic** with comments
+
+## Contributing
+
+This is a demonstration project for QA automation skills. If you'd like to contribute:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/improve-tests`)
+3. Make your changes
+4. Add/update tests as needed
+5. Commit with descriptive messages
+6. Push and create a Pull Request
+
+### Contribution Ideas
+
+- Add iOS test support
+- Implement visual regression testing
+- Add performance metrics
+- Create parallel execution setup
+- Improve reporting with Allure
+- Add API testing layer
+
+## License
+
+This project is created for educational and demonstration purposes.
+
+## Authors
+
+- **Your Name** - *QA Automation Engineer* - [GitHub Profile](https://github.com/yourusername)
+
+## Acknowledgments
+
+- Shopping App development team
+- WebDriverIO community
+- Appium contributors
+
+## Support
+
+For questions or issues:
+- Create an issue in this repository
+- Check existing issues for solutions
+- Review WebDriverIO and Appium documentation
+
+---
+
+**Test Coverage:** 13 test cases across 3 suites  
+**Automation Framework:** WebDriverIO + Appium  
+**Design Pattern:** Page Object Model  
+**Status:** Production Ready
